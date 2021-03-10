@@ -1,0 +1,50 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "ubuntu" do |ubuntu|
+    ubuntu.vm.box = "ubuntu/focal64"
+    ubuntu.vm.hostname = "ubuntu"
+    ubuntu.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.memory = "1024"
+    end
+    ubuntu.vm.provision "shell", path: "../../../provisioning/shell/apt/ubuntu-desktop.sh"
+    ubuntu.vm.provision "shell", inline: "reboot"
+  end
+
+  config.vm.define "lubuntu" do |lubuntu|
+    lubuntu.vm.box = "ubuntu/focal64"
+    lubuntu.vm.hostname = "lubuntu"
+    lubuntu.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.memory = "1024"
+    end
+    lubuntu.vm.provision "shell", path: "../../../provisioning/shell/apt/lubuntu-desktop.sh"
+    lubuntu.vm.provision "shell", inline: "reboot"
+  end
+
+  config.vm.define "xubuntu" do |xubuntu|
+    xubuntu.vm.box = "ubuntu/focal64"
+    xubuntu.vm.hostname = "xubuntu"
+    xubuntu.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.memory = "1024"
+    end
+    xubuntu.vm.provision "shell", path: "../../../provisioning/shell/apt/xubuntu-desktop.sh"
+    xubuntu.vm.provision "shell", inline: "reboot"
+  end
+
+  config.vm.define "ubuntu-mate" do |mate|
+    mate.vm.box = "ubuntu/focal64"
+    mate.vm.hostname = "ubuntu-mate"
+    mate.vm.provider "virtualbox" do |vb|
+      vb.gui = true
+      vb.memory = "1024"
+    end
+    mate.vm.provision "shell", path: "../../../provisioning/shell/apt/ubuntu-mate-desktop.sh"
+    mate.vm.provision "shell", inline: "reboot"
+  end
+
+end
