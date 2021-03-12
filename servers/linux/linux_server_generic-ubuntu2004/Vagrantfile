@@ -1,0 +1,73 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "ubuntu" do |ubuntu|
+    ubuntu.vm.box = "generic/ubuntu2004"
+    ubuntu.vm.hostname = "ubuntu"
+    #ubuntu.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #ubuntu.vm.network "private_network", ip: "192.168.33.10"
+    #ubuntu.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    ubuntu.vm.provider "virtualbox" do |vb|
+      vb.memory = 384
+      vb.cpus = 2
+    end
+    ubuntu.vm.provider "libvirt" do |lv|
+      lv.memory = 384
+      lv.cpus = 2
+    end
+  end
+
+  config.vm.define "apache" do |apache|
+    apache.vm.box = "generic/ubuntu2004"
+    apache.vm.hostname = "apache"
+    #apache.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #apache.vm.network "private_network", ip: "192.168.33.10"
+    #apache.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    apache.vm.provider "virtualbox" do |vb|
+      vb.memory = 384
+      vb.cpus = 2
+    end
+    apache.vm.provider "libvirt" do |lv|
+      lv.memory = 384
+      lv.cpus = 2
+    end
+    apache.vm.provision "shell", path: "../../../provision/shell/apt/apache.sh"
+  end
+
+  config.vm.define "nginx" do |nginx|
+    nginx.vm.box = "generic/ubuntu2004"
+    nginx.vm.hostname = "nginx"
+    #nginx.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #nginx.vm.network "private_network", ip: "192.168.33.10"
+    #nginx.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    nginx.vm.provider "virtualbox" do |vb|
+      vb.memory = 384
+      vb.cpus = 2
+    end
+    nginx.vm.provider "libvirt" do |lv|
+      lv.memory = 384
+      lv.cpus = 2
+    end
+    nginx.vm.provision "shell", path: "../../../provision/shell/apt/nginx.sh"
+  end
+
+  config.vm.define "lighttpd" do |lighttpd|
+    lighttpd.vm.box = "generic/ubuntu2004"
+    lighttpd.vm.hostname = "lighttpd"
+    #lighttpd.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #lighttpd.vm.network "private_network", ip: "192.168.33.10"
+    #lighttpd.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    lighttpd.vm.provider "virtualbox" do |vb|
+      vb.memory = 384
+      vb.cpus = 2
+    end
+    lighttpd.vm.provider "libvirt" do |lv|
+      lv.memory = 384
+      lv.cpus = 2
+    end
+    lighttpd.vm.provision "shell", path: "../../../provision/shell/apt/lighttpd.sh"
+  end
+
+end
