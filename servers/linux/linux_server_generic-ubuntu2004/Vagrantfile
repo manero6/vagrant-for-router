@@ -70,4 +70,27 @@ Vagrant.configure("2") do |config|
     lighttpd.vm.provision "shell", path: "../../../provision/shell/apt/lighttpd.sh"
   end
 
+  MYSQL_PWD="pass"
+  config.vm.define "docker-lamp" do |lamp|
+    lamp.vm.box = "generic/ubuntu2004"
+    lamp.vm.hostname = "docker-lamp"
+    #lamp.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #lamp.vm.network "private_network", ip: "192.168.33.10"
+    #lamp.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    lamp.vm.provider "virtualbox" do |vb|
+      vb.memory = 384
+      vb.cpus = 2
+    end
+    lamp.vm.provider "libvirt" do |lv|
+      lv.memory = 384
+      lv.cpus = 2
+    end
+    lamp.vm.provision "docker" do |d|
+      d.run "mysql",
+        args: "-e MYSQL_ROOT_PASSWORD=" + MYSQL_PWD
+      d.run "phpmyadmin",
+        args: "-p 8080:80 --link mysql:db"
+    end
+  end
+
 end
