@@ -16,9 +16,10 @@ Vagrant.configure("2") do |config|
     xfce.vm.hostname = "fedora-xfce"
     xfce.vm.provider "libvirt" do |lv|
       lv.memory = 1024
+      lv.cpus = 2
     end
-    xfce.vm.provision "shell", path: "../provision/shell/dnf/xfce.sh"
-    xfce.vm.provision "shell", path: "../provision/shell/systemctl/set-graphical-target.sh"
+    xfce.vm.provision "shell", path: "../../../provision/shell/dnf/xfce.sh"
+    xfce.vm.provision "shell", path: "../../../provision/shell/systemctl/set-graphical-target.sh"
     xfce.vm.provision "shell", inline: "reboot"
   end
 
@@ -27,9 +28,10 @@ Vagrant.configure("2") do |config|
     lxde.vm.hostname = "fedora-lxde"
     lxde.vm.provider "libvirt" do |lv|
       lv.memory = 1024
+      lv.cpus = 2
     end
-    lxde.vm.provision "shell", path: "../provision/shell/dnf/lxde.sh"
-    lxde.vm.provision "shell", path: "../provision/shell/systemctl/set-graphical-target.sh"
+    lxde.vm.provision "shell", path: "../../../provision/shell/dnf/lxde.sh"
+    lxde.vm.provision "shell", path: "../../../provision/shell/systemctl/set-graphical-target.sh"
     lxde.vm.provision "shell", inline: "reboot"
   end
 
@@ -38,9 +40,10 @@ Vagrant.configure("2") do |config|
     lxqt.vm.hostname = "fedora-lxqt"
     lxqt.vm.provider "libvirt" do |lv|
       lv.memory = 1024
+      lv.cpus = 2
     end
-    lxqt.vm.provision "shell", path: "../provision/shell/dnf/lxqt.sh"
-    lxqt.vm.provision "shell", path: "../provision/shell/systemctl/set-graphical-target.sh"
+    lxqt.vm.provision "shell", path: "../../../provision/shell/dnf/lxqt.sh"
+    lxqt.vm.provision "shell", path: "../../../provision/shell/systemctl/set-graphical-target.sh"
     lxqt.vm.provision "shell", inline: "reboot"
   end
 
