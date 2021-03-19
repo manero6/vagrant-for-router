@@ -1,1 +1,1 @@
-apt install -y lighttpd
+apt-get install -yq lighttpd

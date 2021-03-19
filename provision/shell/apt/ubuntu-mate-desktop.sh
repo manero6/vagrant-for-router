@@ -1,2 +1,2 @@
-apt update
-apt install -y ubuntu-mate-desktop
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -yq ubuntu-mate-core ubuntu-mate-desktop

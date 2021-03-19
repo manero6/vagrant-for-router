@@ -1,2 +1,2 @@
-apt update
-apt install -y lubuntu-desktop
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -yq lubuntu-desktop

@@ -1,1 +1,1 @@
-apt install -y nginx
+apt-get install -yq nginx
