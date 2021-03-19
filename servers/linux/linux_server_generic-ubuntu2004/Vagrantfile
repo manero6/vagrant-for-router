@@ -1,14 +1,23 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+## my "vagrant-libvirt" bridge network is 192.168.121.0/24, modify it as you please
+NETWORK_ID = "192.168."
+SUBNET_ID ="121."
+
+# bridge to my laptop's ethernet card
+INT_CARD="br-lenovo-usb"
+
 Vagrant.configure("2") do |config|
 
+  HOST_ID = "10"
   config.vm.define "ubuntu" do |ubuntu|
     ubuntu.vm.box = "generic/ubuntu2004"
     ubuntu.vm.hostname = "ubuntu"
+    #ubuntu.vm.synced_folder ".", "/vagrant", type: rsync
     #ubuntu.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #ubuntu.vm.network "private_network", ip: "192.168.33.10"
-    #ubuntu.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    ubuntu.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    ubuntu.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
     ubuntu.vm.provider "virtualbox" do |vb|
       vb.memory = 384
       vb.cpus = 2
@@ -19,12 +28,14 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  HOST_ID = "20"
   config.vm.define "apache" do |apache|
     apache.vm.box = "generic/ubuntu2004"
     apache.vm.hostname = "apache"
+    #apache.vm.synced_folder ".", "/vagrant", type: rsync
     #apache.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #apache.vm.network "private_network", ip: "192.168.33.10"
-    #apache.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    apache.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    apache.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
     apache.vm.provider "virtualbox" do |vb|
       vb.memory = 384
       vb.cpus = 2
@@ -36,12 +47,14 @@ Vagrant.configure("2") do |config|
     apache.vm.provision "shell", path: "../../../provision/shell/apt/apache.sh"
   end
 
+  HOST_ID = "30"
   config.vm.define "nginx" do |nginx|
     nginx.vm.box = "generic/ubuntu2004"
     nginx.vm.hostname = "nginx"
+    #nginx.vm.synced_folder ".", "/vagrant", type: rsync
     #nginx.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #nginx.vm.network "private_network", ip: "192.168.33.10"
-    #nginx.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    nginx.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    nginx.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
     nginx.vm.provider "virtualbox" do |vb|
       vb.memory = 384
       vb.cpus = 2
@@ -53,12 +66,14 @@ Vagrant.configure("2") do |config|
     nginx.vm.provision "shell", path: "../../../provision/shell/apt/nginx.sh"
   end
 
+  HOST_ID = "40"
   config.vm.define "lighttpd" do |lighttpd|
     lighttpd.vm.box = "generic/ubuntu2004"
     lighttpd.vm.hostname = "lighttpd"
+    #lighttpd.vm.synced_folder ".", "/vagrant", type: rsync
     #lighttpd.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #lighttpd.vm.network "private_network", ip: "192.168.33.10"
-    #lighttpd.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    lighttpd.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    lighttpd.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
     lighttpd.vm.provider "virtualbox" do |vb|
       vb.memory = 384
       vb.cpus = 2
@@ -70,13 +85,15 @@ Vagrant.configure("2") do |config|
     lighttpd.vm.provision "shell", path: "../../../provision/shell/apt/lighttpd.sh"
   end
 
+  HOST_ID = "50"
   MYSQL_PWD="pass"
   config.vm.define "docker-lamp" do |lamp|
     lamp.vm.box = "generic/ubuntu2004"
     lamp.vm.hostname = "docker-lamp"
+    #lamp.vm.synced_folder ".", "/vagrant", type: rsync
     #lamp.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #lamp.vm.network "private_network", ip: "192.168.33.10"
-    #lamp.vm.synced_folder "../data", "/vagrant_data", type: rsync
+    lamp.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    lamp.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
     lamp.vm.provider "virtualbox" do |vb|
       vb.memory = 384
       vb.cpus = 2
