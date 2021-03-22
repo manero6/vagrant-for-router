@@ -3,8 +3,9 @@
 
 Vagrant.configure("2") do |config|
 
+  config.vm.box = "generic/ubuntu2004"
+
   config.vm.define "ubuntu" do |ubuntu|
-    ubuntu.vm.box = "generic/ubuntu2004"
     ubuntu.vm.hostname = "ubuntu"
     ubuntu.vm.provider "virtualbox" do |vb|
       vb.memory = 1024
@@ -19,7 +20,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "lubuntu" do |lubuntu|
-    lubuntu.vm.box = "generic/ubuntu2004"
     lubuntu.vm.hostname = "lubuntu"
     lubuntu.vm.provider "virtualbox" do |vb|
       vb.memory = 1024
@@ -34,7 +34,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "xubuntu" do |xubuntu|
-    xubuntu.vm.box = "generic/ubuntu2004"
     xubuntu.vm.hostname = "xubuntu"
     xubuntu.vm.provider "virtualbox" do |vb|
       vb.memory = 1024
@@ -49,7 +48,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "ubuntu-mate" do |mate|
-    mate.vm.box = "generic/ubuntu2004"
     mate.vm.hostname = "ubuntu-mate"
     mate.vm.provider "virtualbox" do |vb|
       vb.memory = 1024

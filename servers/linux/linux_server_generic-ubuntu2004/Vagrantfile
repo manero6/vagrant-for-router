@@ -10,9 +10,10 @@ INT_CARD="br-lenovo-usb"
 
 Vagrant.configure("2") do |config|
 
+  config.vm.box = "generic/ubuntu2004"
+  
   HOST_ID = "10"
   config.vm.define "ubuntu" do |ubuntu|
-    ubuntu.vm.box = "generic/ubuntu2004"
     ubuntu.vm.hostname = "ubuntu"
     #ubuntu.vm.synced_folder ".", "/vagrant", type: rsync
     #ubuntu.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
@@ -30,7 +31,6 @@ Vagrant.configure("2") do |config|
 
   HOST_ID = "20"
   config.vm.define "apache" do |apache|
-    apache.vm.box = "generic/ubuntu2004"
     apache.vm.hostname = "apache"
     #apache.vm.synced_folder ".", "/vagrant", type: rsync
     #apache.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
@@ -49,7 +49,6 @@ Vagrant.configure("2") do |config|
 
   HOST_ID = "30"
   config.vm.define "nginx" do |nginx|
-    nginx.vm.box = "generic/ubuntu2004"
     nginx.vm.hostname = "nginx"
     #nginx.vm.synced_folder ".", "/vagrant", type: rsync
     #nginx.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
@@ -68,7 +67,6 @@ Vagrant.configure("2") do |config|
 
   HOST_ID = "40"
   config.vm.define "lighttpd" do |lighttpd|
-    lighttpd.vm.box = "generic/ubuntu2004"
     lighttpd.vm.hostname = "lighttpd"
     #lighttpd.vm.synced_folder ".", "/vagrant", type: rsync
     #lighttpd.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
@@ -88,7 +86,6 @@ Vagrant.configure("2") do |config|
   HOST_ID = "50"
   MYSQL_PWD="pass"
   config.vm.define "docker-lamp" do |lamp|
-    lamp.vm.box = "generic/ubuntu2004"
     lamp.vm.hostname = "docker-lamp"
     #lamp.vm.synced_folder ".", "/vagrant", type: rsync
     #lamp.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
