@@ -1,0 +1,77 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+## my "vagrant-libvirt" bridge network is 192.168.121.0/24, modify it as you please
+NETWORK_ID = "192.168."
+SUBNET_ID ="121."
+
+# bridge to my laptop's ethernet card
+INT_CARD="br-lenovo-usb"
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "generic/ubuntu2004"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 384
+    vb.cpus = 2
+  end
+  config.vm.provider "libvirt" do |lv|
+    lv.memory = 384
+    lv.cpus = 2
+  end
+  
+  HOST_ID = "10"
+  config.vm.define "ubuntu" do |vm|
+    vm.vm.hostname = "ubuntu"
+    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
+  end
+
+  HOST_ID = "20"
+  config.vm.define "apache" do |vm|
+    vm.vm.hostname = "apache"
+    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
+    vm.vm.provision "shell", path: "../../../provision/shell/apt/apache.sh"
+  end
+
+  HOST_ID = "30"
+  config.vm.define "nginx" do |vm|
+    vm.vm.hostname = "nginx"
+    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
+    vm.vm.provision "shell", path: "../../../provision/shell/apt/nginx.sh"
+  end
+
+  HOST_ID = "40"
+  config.vm.define "lighttpd" do |vm|
+    vm.vm.hostname = "lighttpd"
+    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
+    vm.vm.provision "shell", path: "../../../provision/shell/apt/lighttpd.sh"
+  end
+
+  HOST_ID = "50"
+  MYSQL_PWD="pass"
+  config.vm.define "docker-db" do |vm|
+    vm.vm.hostname = "docker-db"
+    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
+    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
+    vm.vm.provision "docker" do |d|
+      d.run "mysql",
+        args: "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=" + MYSQL_PWD
+      d.run "phpmyadmin",
+        args: "-p 80:80 --link mysql:db"
+      #d.run "adminer",
+      #  args: "-p 8080:8080 --link mysql:db"
+    end
+  end
+
+end
