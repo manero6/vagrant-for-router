@@ -1,3 +1,4 @@
 [submodule "desktop"]
 	path = desktop
 	url = git@github.com:manero6/vagrant-desktop.git
+	branch = router
