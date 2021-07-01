@@ -5,8 +5,50 @@
 NETWORK_ID = "192.168."
 SUBNET_ID ="121."
 
-# bridge to my laptop's ethernet card
-INT_CARD="br-lenovo-usb"
+# bridge to my laptop's Ethernet card
+INT_CARD="br-uni-1"
+
+servers = [
+  {
+    hostname: "ubuntu",
+    ip: "10"
+  },
+  {
+    hostname: "apache",
+    ip: "20",
+    provision: "shell",
+    script: "apache.sh"
+  },
+  {
+    hostname: "nginx",
+    ip: "30",
+    provision: "shell",
+    script: "nginx.sh"
+  },
+  {
+    hostname: "lighttpd",
+    ip: "40",
+    provision: "shell",
+    script: "lighttpd.sh"
+  },
+#  {
+#    hostname: "docker-mysql",
+#    ip: "50",
+#    provision: "docker",
+#    run: [{
+#      container: "mysql",
+#      args: "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=pass"
+#    },
+#    {
+#      container: "phpmyadmin",
+#      args: "-p 80:80 --link mysql:db"
+#    },
+#    {
+#      container: "adminer",
+#      args: "-p 80:80 --link mysql:db"
+#    }]
+#  }
+]
 
 Vagrant.configure("2") do |config|
 
@@ -22,39 +64,23 @@ Vagrant.configure("2") do |config|
     lv.cpus = 2
   end
   
-  HOST_ID = "10"
-  config.vm.define "ubuntu" do |vm|
-    vm.vm.hostname = "ubuntu"
-    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
-    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
-  end
-
-  HOST_ID = "20"
-  config.vm.define "apache" do |vm|
-    vm.vm.hostname = "apache"
-    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
-    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
-    vm.vm.provision "shell", path: "../../../provision/shell/apt/apache.sh"
-  end
-
-  HOST_ID = "30"
-  config.vm.define "nginx" do |vm|
-    vm.vm.hostname = "nginx"
-    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
-    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
-    vm.vm.provision "shell", path: "../../../provision/shell/apt/nginx.sh"
-  end
-
-  HOST_ID = "40"
-  config.vm.define "lighttpd" do |vm|
-    vm.vm.hostname = "lighttpd"
-    #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-    #vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + HOST_ID, auto_config: false
-    vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
-    vm.vm.provision "shell", path: "../../../provision/shell/apt/lighttpd.sh"
+  servers.each do |server|
+    config.vm.define server[:hostname] do |vm|
+      vm.vm.hostname = server[:hostname]
+      #vm.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+      vm.vm.network "private_network", ip: NETWORK_ID + SUBNET_ID + server[:ip], auto_config: false
+      vm.vm.network "public_network", dev: INT_CARD, mode: "bridge", type: "bridge"
+      if server[:provision] == "shell"
+        vm.vm.provision "shell", path: "../../../provision/shell/apt/" + server[:script]
+#      elsif server[:provision] == "docker"
+#        server[:run].each do |docker|
+#          vm.vm.provision "docker" do |d|
+#            d.run docker[:container],
+#              args: docker[:args]
+#          end
+#        end
+      end
+    end
   end
 
   HOST_ID = "50"
@@ -69,8 +95,8 @@ Vagrant.configure("2") do |config|
         args: "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=" + MYSQL_PWD
       d.run "phpmyadmin",
         args: "-p 80:80 --link mysql:db"
-      #d.run "adminer",
-      #  args: "-p 8080:8080 --link mysql:db"
+      d.run "adminer",
+        args: "-p 8080:8080 --link mysql:db"
     end
   end
 
